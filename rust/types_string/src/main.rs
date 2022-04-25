@@ -10,9 +10,16 @@ fn main() {
     let string_slice: &str = &s[..]; // Take a full slice of the String.
     println!("string_slice: {}", string_slice); // OK
     let string_slice1: &str = &*s; // OK:
-    // s: String
-    // *s: str (via Deref<Target=str>)
-    // &*s: &str
+                                   // s: String
+                                   // *s: str (via Deref<Target=str>)
+                                   // &*s: &str
     println!("string_slice1: {}", string_slice1);
     println!("ref to deref of s: {}", &*s);
+
+    assert!("peanut".contains("nut"));
+    assert_eq!("O_O".replace("O", "T"), "T_T");
+    assert_eq!("    clean\n".trim(), "clean");
+    for word in "veni, vidi, vici".split(", ") {
+        assert!(word.starts_with("v"));
+    }
 }
