@@ -161,7 +161,7 @@ fn concurrent_render(
             });
         }
     })
-    .unwrap();
+    .unwrap(); // calls the closure to create, execute, wait new threads, and return OK(()) or panic.
 }
 
 fn main() {
