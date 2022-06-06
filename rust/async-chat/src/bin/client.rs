@@ -1,3 +1,4 @@
+use async_chat::utils::ChatError;
 use async_std::prelude::*;
 use async_chat::utils::{self, ChatResult};
 use async_std::io;
@@ -86,7 +87,8 @@ fn get_next_token(mut input: &str) -> Option<(&str, &str)> {
 
 use async_std::task;
 
-fn main() -> ChatResult<()> {
+//fn main() -> ChatResult<()> {
+fn main() {
     let address = std::env::args().nth(1)
             .expect("Usage: client ADDRESS:PORT");
 
@@ -97,8 +99,11 @@ fn main() -> ChatResult<()> {
         let to_server = send_commands(socket.clone());
         let from_server = handle_replies(socket);
 
-        // Return either future is ready and exit as soon either one has finished.:wq
+        // Return either future is ready and exit as soon either one has finished.
         from_server.race(to_server).await?;
-        Ok(())
-    })
+        Ok::<(), ChatError>(())
+    }).unwrap(); // unwrap() instead of return here. 
+                 // or we have to declare main's return as ChatResult<()> so that 
+                 // the async block can infer its return type properly which is 
+                 // required by await?.
 }
