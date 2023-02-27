@@ -23,6 +23,6 @@ fn main() -> io::Result<()> {
     let v = s.into_bytes();
     let mut stdout = io::stdout();
     let written = io::copy(&mut v.as_slice(), &mut stdout)?;
-    println!("{} bytes written to stdout:", written);
+    println!("\n{} bytes written to stdout:", written);
     Ok(())
 }
