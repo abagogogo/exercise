@@ -1,22 +1,26 @@
-#LATEST_CPP = $(shell find . -type f -name "*.cpp" | xargs stat --format '%Y:%n' | sort -nr | awk -F: '{print $$2}' | head -n1)
-LATEST_CPP = $(shell find . -type f -name "*.cc" -o -name "*.cpp" | xargs stat --format '%Y:%n' | sort -nr | awk -F: '{print $$2}' | head -n1)
-LATEST_EXE = ./a.out
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall -Wextra
 
-default: $(LATEST_EXE) run
+LATEST_CC := $(shell find . -type f -name "*.cc" | xargs stat --format '%Y:%n' | sort -nr | awk -F: '{print $$2}' | head -n1)
+SOURCE ?= $(LATEST_CC)
 
-$(LATEST_EXE): $(LATEST_CPP)
+EXE = ./a.out
+
+default: clean $(EXE) run
+
+$(EXE): $(SOURCE)
 	@echo "---- Compiling $< ----"	
-	g++ -std=c++0x -o $@ $<
+	$(CXX) $(CXXFLAGS) -o $@ $<
 	@echo "---- Output: $@ ----"	
 
-run:
-	@echo "---- running $(LATEST_EXE) ----"	
-	$(LATEST_EXE)
+run: $(EXE)
+	@echo "---- running $(EXE) ----"	
+	./$(EXE)
 
 edit:
-	gvim $(LATEST_CPP)
+	gvim $(SOURCE_CPP)
 
 clean:
+	rm -f $(OBJECTS) $(EXE)
 	rm -f *~
-	rm -f a.out
 	rm -f .*.un~
