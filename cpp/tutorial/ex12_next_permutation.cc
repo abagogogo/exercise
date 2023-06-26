@@ -5,7 +5,7 @@ using namespace std;
 
 int main() {
   // std::array is a safer and modern contain in c++ than c array.
-  std::array<int, 3> a = {1, 2, 3};
+  array<int, 3> a = {1, 2, 3};
 
   do {
     cout << a[0] << "," << a[1] << "," << a[2] << endl;

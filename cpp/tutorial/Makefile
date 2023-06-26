@@ -6,7 +6,7 @@ SOURCE ?= $(LATEST_CC)
 
 EXE = ./a.out
 
-default: clean ${EXE} run
+default: clean $(EXE) run
 
 $(EXE): $(SOURCE)
 	@echo "---- Compiling $< ----"	
@@ -23,3 +23,4 @@ edit:
 clean:
 	rm -f $(OBJECTS) $(EXE)
 	rm -f *~
+	rm -f .*.un~

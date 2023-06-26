@@ -53,15 +53,15 @@ int main() {
   M.emplace("SRM", 3);
 
   int x = M["Top"] + M["Coder"];
-  std::cout << "x = " << x << std::endl;
+  cout << "x = " << x << endl;
 
-  std::cout << "Traversing map M:" << std::endl;
+  cout << "Traversing map M:" << endl;
   for (const auto& [key, value] : M) {
-    std::cout << "   " << key << " => " << value << std::endl;
+    cout << "   " << key << " => " << value << endl;
   }
 
   if (M.find("SRM") != M.end()) {
-    std::cout << "Found and erase it" << std::endl;
+    cout << "Found and erase it" << endl;
     M.erase("SRM");
   }
 
@@ -71,7 +71,7 @@ int main() {
   }
 
   for (const auto& [key, value] : M) {
-    std::cout << "   " << key << " => " << value << std::endl;
+    cout << "   " << key << " => " << value << endl;
   }
 
   return 0;
