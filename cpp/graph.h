@@ -1,9 +1,11 @@
-#include "subset.h"
-#include <iostream>
-#include <vector>
+#include <algorithm>
 #include <deque>
+#include <iostream>
 #include <unordered_map>
+#include <vector>
+#include <set>
 #include <stack>
+#include "subset.h"
 
 using namespace std;
 
@@ -68,6 +70,24 @@ public:
             }
         }
     }
+    void bfs_new(int start) {
+      deque<int> queue;
+      vector<bool> visited(vert_cnt_, false);
+
+      queue.push_back(start);
+      while (!queue.empty()) {
+        int curr = queue.front();
+        queue.pop_front();
+        visited[curr] = true;
+        cout << "BFS: do something to " << curr << endl;
+
+        for (int neighbor : adj_list_[curr]) {
+          if (!visited[neighbor]) {
+            queue.push_back(neighbor);
+          }
+        }
+      }
+    }
 
     void dfs(int start) {
         stack<int> stack;
@@ -87,6 +107,25 @@ public:
                 cout << "DFS_s do something to "<< curr << endl;
             }
         }
+    }
+
+    void dfs_new(int start) {
+      stack<int> stack;
+      vector<bool> visited(vert_cnt_, false);
+
+      stack.push(start);
+      while(!stack.empty()) {
+        int curr = stack.top();
+        stack.pop();
+
+        if (!visited[curr]) {
+          visited[curr] = true;
+          cout << "DFS_s do something to "<< curr << endl;
+          for (int neighbor : adj_list_[curr]) {
+            if (!visited[neighbor]) stack.push(neighbor);
+          }
+        }
+      }
     }
 
     void dfs_r(int start) {
