@@ -20,6 +20,6 @@ int main(void) {
     //g1.dfs_old(0);
     g1.dfs(0);
     g1.dfs_r(0);
-    cout << "the graph" << (g1.has_cycle() ? "has cycle(s)" : "has no cycle") << endl;
+    cout << "the graph" << (g1.has_cycle() ? " has cycle(s)" : "has no cycle") << endl;
     return 0;
 }
