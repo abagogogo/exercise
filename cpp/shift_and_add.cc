@@ -11,23 +11,23 @@ int mul(int m, int n) {
     if ((n & 0x1)) {
       sum += m;
     }
-    n >>= 1;
     m <<= 1;
+    n >>= 1;
   }
   return sum;
 }
 
 int power(int a, int r) {
-  int sum = 1;
+  int res = 1;
   int pow = a;
   while (r) {
     if ((r & 0x1)) {
-      sum *= pow;
+      res *= pow;
     }
     pow *= pow;
     r >>= 1;
   }
-  return sum;
+  return res;
 }
 
 int main() {

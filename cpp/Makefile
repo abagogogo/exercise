@@ -24,3 +24,4 @@ clean:
 	rm -f $(OBJECTS) $(EXE)
 	rm -f *~
 	rm -f .*.un~
+	rm -f .*.swp~
