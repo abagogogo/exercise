@@ -56,12 +56,18 @@ void remove_dup(Node *head) {
     }
 }
 
+Node *get_kth(Node *head, int k) {
+  Node *runner = head;
+  for (int i = 0; i < k && runner; ++i) {
+    runner = runner->next;
+  }
+  return runner;
+}
+
 Node *get_kth_to_last(Node *head, int k) {
-    Node *runner = head;
-    for (int i = 0; i < k; ++i) {
-        if (!runner) return nullptr;
-        runner = runner->next;
-    }
+    Node *runner = get_kth(head, k);
+    if (!runner) return nullptr;
+    
     Node *curr = head;
     while (runner) {
         runner = runner->next;
@@ -87,6 +93,6 @@ Node *add_rev_list(Node *l1, Node *l2) {
         return add_rev_list_helper(l1, l2, 0);
 }
 
-int main(void) {
+int main() {
     return 0;
 }

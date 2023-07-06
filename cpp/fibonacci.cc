@@ -16,7 +16,7 @@ int fibonacci(int n) {
     return fn;
 } 
 
-int main(void) {
+int main() {
     int n;
     int fn;
 

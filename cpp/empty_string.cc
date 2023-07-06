@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int main(void) {
+int main() {
     string s1;
     string s2 = "";
 

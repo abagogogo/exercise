@@ -9,20 +9,16 @@ using namespace std;
 using namespace std;
 
 struct Node {
-    Node *left;
-    Node *right;
+    Node *left = nullptr;
+    Node *right = nullptr;
     int   id;
 
-    Node(int id) {
-        this->id = id;
-        left = right = nullptr;
-    }
+    Node(int id) : id(id) {}
     ~Node(void) {
         delete left;
         delete right;
     }
 };
-
 
 void preorder(Node *root) {
     if (!root) return;
@@ -132,7 +128,7 @@ void bst_delete(Node *root, int value) {
     dummy.right = nullptr;
 }
 
-int main(void) {
+int main() {
     // Tree1 for preorder ////////
     Node *t1 = new Node(0);
 
