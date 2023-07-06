@@ -1,6 +1,6 @@
-#include <vector>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 using big_dec = vector<unsigned int>;
@@ -21,7 +21,7 @@ big_dec hex2dec(const big_hex &in) {
                 hex_num[i - 1] += (r << 8);
             } else {
                 //dec_num.insert(dec_num.begin(), r);
-                dec_num.push_back(r);
+                dec_num.emplace_back(r);
             }
             all_zero_q &= (q == 0);
         }
@@ -35,11 +35,11 @@ void show_big_nums(const big_hex& hex_num, const big_dec& dec_num) {
     cout << endl;
 
     cout << "Decimal number = ";
-    for (int i = dec_num.size() -1; i >= 0; --i) cout << dec_num[i];
+    for (int i = dec_num.size() - 1; i >= 0; --i) cout << dec_num[i];
     cout << endl;
 }
 
-int main(void) {
+int main() {
     vector<big_hex> hex_numbers {
         {0x02, 0x01}, // 0x102
         {0xff, 0xff, 0xff, 0xff}, // 0xffffffff

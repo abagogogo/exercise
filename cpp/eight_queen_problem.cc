@@ -70,7 +70,7 @@ int main(void) {
     Queen::resetQueens(queens);
     settled_queens.push_back(&queens[0]);
 
-    while( !settled_queens.empty() && settled_queens.size() < total_queen_num) {
+    while( !settled_queens.empty() && static_cast<int>(settled_queens.size()) < total_queen_num) {
         next_queen = &queens[settled_queens.size()];
         if (!Queen::addQueen(settled_queens, next_queen, total_queen_num)) {
             Queen::rollback(settled_queens);
