@@ -38,9 +38,9 @@ class Graph {
  public:
   void add_edge(Edge e) {
     int v = max(e.src(), e.dst());
-    edges_.push_back(e);
+    edges_.emplace_back(e);
     if (v > vert_cnt_) vert_cnt_ = v + 1;
-    adj_list_[e.src()].push_back(e.dst());
+    adj_list_[e.src()].emplace_back(e.dst());
   }
 
   void show(void) {
@@ -75,7 +75,7 @@ class Graph {
     deque<int> queue;
     vector<bool> visited(vert_cnt_, false);
 
-    queue.push_back(start);
+    queue.emplace_back(start);
     visited[start] = true;
     while (!queue.empty()) {
       int curr = queue.front();
@@ -84,7 +84,7 @@ class Graph {
 
       for (int neighbor : adj_list_[curr]) {
         if (!visited[neighbor]) {
-          queue.push_back(neighbor);
+          queue.emplace_back(neighbor);
           visited[neighbor] = true;
         }
       }
