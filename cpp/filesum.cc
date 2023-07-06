@@ -1,7 +1,8 @@
+#include <stdlib.h>
+
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
-#include <stdlib.h>
 
 using namespace std;
 
@@ -19,21 +20,21 @@ int main(void) {
     return 0;
 #endif
 
-    string filename;
-    int    sum = 0;
-    int    num;
+  string filename;
+  int sum = 0;
+  int num;
 
-    cout << "Please enter the interger file to parse: " << endl;
-    getline(cin, filename);
-    if (filename.empty()) {
-        cout << "use defautl filename" << endl;
-        filename = "int_data.txt";
-    }
+  cout << "Please enter the interger file to parse: " << endl;
+  getline(cin, filename);
+  if (filename.empty()) {
+    cout << "use defautl filename" << endl;
+    filename = "int_data.txt";
+  }
 
-    cout << "filename: " << filename << endl;
-    ifstream input(filename.c_str(), ios::in | ios::binary);
+  cout << "filename: " << filename << endl;
+  ifstream input(filename.c_str(), ios::in | ios::binary);
 
-#if 0 // ifstream getline()
+#if 0  // ifstream getline()
     for (string line; getline(input, line);) {
         num = std::stoi(line); // C++11
         //sscanf(line.c_str(), "%d", &num); // C sytle
@@ -41,8 +42,8 @@ int main(void) {
         sum += num;
     }
 #else
-    while (input >> num) sum += num;
+  while (input >> num) sum += num;
 #endif
-    cout << "sum = " << sum << endl;
-    return 0;
+  cout << "sum = " << sum << endl;
+  return 0;
 }

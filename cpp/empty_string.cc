@@ -4,12 +4,12 @@
 using namespace std;
 
 int main() {
-    string s1;
-    string s2 = "";
+  string s1;
+  string s2 = "";
 
-    cout << "s1.empty() = " << s1.empty() << endl;
-    cout << "s1.length() = " << s1.length() << endl;
-    cout << "s1.size() = " << s1.size() << endl;
+  cout << "s1.empty() = " << s1.empty() << endl;
+  cout << "s1.length() = " << s1.length() << endl;
+  cout << "s1.size() = " << s1.size() << endl;
 
 #if 0
     cout << "s2.empty() = " << s2.empty() << endl;
@@ -21,5 +21,5 @@ int main() {
     }
 #endif
 
-    return 0;
+  return 0;
 }
