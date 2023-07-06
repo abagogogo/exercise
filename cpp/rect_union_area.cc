@@ -48,7 +48,7 @@ struct Rect {
 
 struct Cut {
   int x;         // x-axis of upper_left or lower_right of a rectangle.
-  bool leaving;  //  leaving a rectangle.
+  bool leaving;  // leaving a rectangle.
   Line line;     // vertical line of a rectangle.
   friend ostream &operator<<(ostream &os, Cut &cut);
 };
@@ -60,24 +60,22 @@ ostream &operator<<(ostream &os, Cut &cut) {
   return os;
 }
 
-bool cut_greater(const Cut &c1, const Cut &c2) {
-  if (c1.x > c2.x)
-    return true;
-  else if (c1.x == c2.x)
-    return !c1.leaving;
-  else
-    return false;
-}
-
 int rects_coverage(vector<Rect> &rects) {
   if (rects.empty()) return 0;
 
+  auto cut_greater = [](const Cut& c1, const Cut& c2) {
+    if (c1.x > c2.x)
+      return true;
+     else if (c1.x == c2.x)
+       return !c1.leaving;
+    else
+      return false;
+  };
+
   // Set up a priority_queue to scan rectangles from left to right, leaving to
   // entering.
-  priority_queue<Cut, vector<Cut>,
-                 std::function<bool(const Cut &, const Cut &)>>
-      cuts(cut_greater);
-  for (auto &rect : rects) {
+  priority_queue<Cut, vector<Cut>, decltype(cut_greater)> cuts(cut_greater);
+  for (const auto &rect : rects) {
     cuts.push(
         {rect.upper_left.x, false, {rect.upper_left.y, rect.lower_right.y}});
     cuts.push(
@@ -110,7 +108,7 @@ int rects_coverage(vector<Rect> &rects) {
   return area;
 }
 
-int main(void) {
+int main() {
   vector<Line> lines = {{1, 3}, {2, 4}, {5, 6}, {7, 10}, {8, 9}};
   cout << "lines coverage: " << lines_coverage(lines) << endl;
 
