@@ -8,17 +8,15 @@
 
 using namespace std;
 
-#define MAX_DIST INT_MAX
+const int MAX_DIST=INT_MAX;
 
 struct AdjNode {
   int dst;
   int weight;
-
-  AdjNode(int d, int w) : dst(d), weight(w) {}
 };
 
 class Graph {
- protected:
+ private:
   vector<vector<AdjNode>> adj_list_;
 
  public:
@@ -26,51 +24,50 @@ class Graph {
 
   void add_edge(int src, int dst, int weight) {
     int max_v = max(src, dst);
-    if (max_v >= adj_list_.size()) adj_list_.resize(max_v + 1);
-    adj_list_[src].push_back(AdjNode(dst, weight));
+    if (max_v >= static_cast<int>(adj_list_.size())) adj_list_.resize(max_v + 1);
+    adj_list_[src].emplace_back(AdjNode{dst, weight});
   }
 
-  void show(void) {
-    for (int src = 0; src < adj_list_.size(); ++src) {
-      for (auto& node : adj_list_[src]) {
-        cout << src << " -> " << node.dst << ", weight=" << node.weight << endl;
+  void show() {
+    for (int src = 0; src < static_cast<int>(adj_list_.size()); ++src) {
+      for (const auto& [dst, weight] : adj_list_[src]) {
+        cout << src << " -> " << dst << ", weight = " << weight << endl;
       }
     }
   }
 
   void shortest_path(int src) {
-    set<pair<int, int>> setds;
+    set<pair<int, int>> pq;
     vector<int> dist(adj_list_.size(), MAX_DIST);
 
-    setds.insert(make_pair(0, src));
+    pq.emplace(0, src);
     dist[src] = 0;
 
-    while (!setds.empty()) {
-      pair<int, int> edge = *setds.begin();
-      setds.erase(setds.begin());
+    while (!pq.empty()) {
+      auto [_, u]  = *pq.begin();
+      pq.erase(pq.begin());
 
-      int u = edge.second;
-      for (auto& node : adj_list_[u]) {
+      for (const auto& node : adj_list_[u]) {
         int v = node.dst;
 
         if (dist[v] > dist[u] + node.weight) {
           if (dist[v] != MAX_DIST) {
-            setds.erase(make_pair(dist[v], v));
+            pq.erase(make_pair(dist[v], v));
           }
           dist[v] = dist[u] + node.weight;
-          setds.insert(make_pair(dist[v], v));
+          pq.emplace(make_pair(dist[v], v));
         }
       }
     }
 
     cout << "Vertext\tDistance from source (" << src << "):" << endl;
-    for (int i = 0; i < dist.size(); ++i) {
+    for (int i = 0; i < static_cast<int>(dist.size()); ++i) {
       cout << i << "\t" << dist[i] << endl;
     }
   }
 };
 
-int main(void) {
+int main() {
   Graph g(9);
 
   g.add_edge(0, 1, 4);
