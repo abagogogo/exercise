@@ -1,0 +1,9 @@
+Defines various enums and structures for Thunderbolt control channel messages.
++ Defines enums for different configuration spaces and configuration errors.
++ Defines structures for common headers, read/write packets, error packets, and acknowledgement packets.
++ Defines enums and structures for ICM (Intel Connection Manager) messages.
++ Defines enums and structures for Falcon Ridge, Alpine Ridge, Titan Ridge, Ice Lake, and USB4 ICM messages.
++ Defines enums and structures for XDomain messages.
++ Includes necessary header files.
++ Contains various constants and masks used in the code.
++ Provides comments for better understanding of the code.

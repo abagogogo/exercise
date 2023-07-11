@@ -1,0 +1,9 @@
+The code defines various structures and functions for managing Thunderbolt devices.
++ It includes headers and defines constants for Thunderbolt driver.
++ It defines structures for NVM (Non-Volatile Memory) information, Thunderbolt switches, ports, and paths.
++ It provides functions for NVM operations, switch configuration, port management, and path activation.
++ It includes functions for reading and writing Thunderbolt configuration registers.
++ It provides helper functions for checking switch and port types, and for iterating over ports on a switch.
++ It includes functions for handling Thunderbolt events, managing bandwidth allocation, and handling retimers.
++ It includes functions for managing USB4 ports and performing USB4-specific operations.
++ It provides functions for handling ACPI (Advanced Configuration and Power Interface

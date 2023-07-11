@@ -1,0 +1,7 @@
+The code defines various enums and structures related to the Thunderbolt driver.
++ It declares a function `nhi_mailbox_cmd` that takes a `tb_nhi` structure and a command as input and returns an integer.
++ It declares a function `nhi_mailbox_mode` that takes a `tb_nhi` structure as input and returns an enum value.
++ It defines a structure `tb_nhi_ops` that contains function pointers for various NHI specific operations.
++ It declares a constant structure `icl_nhi_ops` of type `tb_nhi_ops`.
++ It defines various PCI device IDs used in the driver.
++ It defines a PCI class for USB4 devices.

@@ -1,0 +1,20 @@
+The code is implementing a Thunderbolt driver for bus logic.
++ It includes various header files and defines some constants.
++ It defines a structure for the Thunderbolt connection manager.
++ It defines functions for initializing and managing bandwidth groups.
++ It defines functions for attaching and detaching ports to bandwidth groups.
++ It defines functions for discovering and managing DP resources.
++ It defines functions for discovering and managing tunnels.
++ It defines functions for handling hotplug events.
++ It defines functions for handling bandwidth allocation requests.
++ It defines functions for suspending and resuming the Thunderbolt driver.
++ It defines functions for handling runtime PM.
++ It defines functions for handling notifications and events.
++ It defines functions for starting and stopping the Thunderbolt driver.
++ It defines functions for scanning and finalizing the Thunderbolt topology.
++ It defines functions for handling hotplug events and bandwidth allocation requests in a separate thread.
++ It defines functions for freezing and thawing the Thunderbolt driver.
++ It defines functions for completing the Thunderbolt driver initialization process.
++ It defines functions for handling Thunderbolt controller suspend and resume operations.
++ It defines functions for handling Thunderbolt controller runtime suspend and resume operations.
++ It defines functions for handling Thunderbolt controller power management.

@@ -1,0 +1,7 @@
+The code defines a Thunderbolt driver for control channel and configuration commands.
++ It includes necessary header files and defines structures and functions for control channel and configuration commands.
++ The control channel structures and functions handle the allocation, starting, stopping, and freeing of the control channel.
++ The configuration command structures and functions handle the allocation, sending, and receiving of Thunderbolt configuration requests.
++ There are also functions for acknowledging notifications and plug events, resetting the Thunderbolt device, and reading/writing raw configuration data.
++ The code also includes helper functions for getting the route and creating a header for Thunderbolt configuration requests.
++ Lastly, there are functions for reading/writing configuration data and getting the upstream port of a Thunderbolt device.

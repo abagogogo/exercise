@@ -1,0 +1,5 @@
+Defines a Thunderbolt DMA configuration based mailbox support.
++ Includes necessary headers and defines some constants.
++ Declares structures for Thunderbolt switch and DMA port.
++ Declares functions for allocating and freeing DMA port, reading and writing flash, updating authentication, and power cycling.
++ Ends the header file with an endif directive.

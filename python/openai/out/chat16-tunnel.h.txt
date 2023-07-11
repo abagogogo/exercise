@@ -1,0 +1,8 @@
+Defines a set of tunnel types for Thunderbolt connections.
++ Defines a struct `tb_tunnel` that represents a tunnel between two Thunderbolt ports.
++ The struct contains various function pointers for tunnel initialization, de-initialization, activation, bandwidth allocation, and bandwidth consumption.
++ Provides functions for discovering and allocating tunnels of different types (PCI, DP, DMA, USB3).
++ Provides functions for freeing, activating, deactivating, and restarting tunnels.
++ Provides functions for checking tunnel validity, checking if a port is on a tunnel path, and retrieving maximum, allocated, and consumed bandwidth for a tunnel.
++ Provides inline functions for checking the type of a tunnel (PCI, DP, DMA, USB3).
++ Includes a license header and guard macros to prevent multiple inclusion of the header file.

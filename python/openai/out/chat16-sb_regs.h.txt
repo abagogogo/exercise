@@ -1,0 +1,7 @@
+Defines various USB4 port sideband registers and their corresponding values.
++ Defines an enumeration for USB4 sideband opcodes.
++ Defines constants for USB4 sideband metadata and data registers.
++ Defines bit masks and shifts for various USB4 margin capabilities.
++ Defines bit masks and shifts for USB4 hardware and software margining configurations.
++ Provides SPDX-License-Identifier and copyright information.
++ Includes header guards to prevent multiple inclusion of the same header file.

@@ -1,0 +1,7 @@
+Defines various register addresses and bit masks for the Thunderbolt driver.
++ Defines the structure for the TX/RX ring descriptors.
++ Defines the flags for the TX/RX rings.
++ Defines the base addresses for the NHI registers.
++ Defines the number of registers for ring notifications and interrupts.
++ Defines various bit masks and values for the NHI registers.
++ Defines specific commands for the LC mailbox in the ICL platform.

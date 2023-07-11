@@ -1,0 +1,7 @@
+The code defines various enums and structures related to Thunderbolt device configuration.
++ It includes necessary headers and defines constants for Thunderbolt configuration.
++ The code defines capability headers and structures for different Thunderbolt capabilities.
++ It defines device headers for Thunderbolt switches and ports.
++ It defines registers and masks for different Thunderbolt adapters (TMU, PCIe, USB, DP).
++ It defines registers and masks for Thunderbolt hop configuration.
++ It defines registers and masks for Thunderbolt time, plug events, low power, and link controller configuration.
