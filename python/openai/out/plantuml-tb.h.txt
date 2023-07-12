@@ -1,9 +1,5 @@
 @startuml
 
-class tb {
-	+root_switch: tb_switch*
-}
-
 class tb_nvm {
 }
 
@@ -13,12 +9,10 @@ class tb_switch_tmu {
 class tb_switch {
   +ports: tb_port*
   +tmu: tb_switch_tmu
-  +tb: tb*
   +nvm: tb_nvm*
 }
 
 class tb_bandwidth_group {
-  +tb: tb*
 }
 
 class tb_port {
@@ -35,7 +29,6 @@ class usb4_port {
 }
 
 class tb_retimer {
-  +tb: tb*
   +port: tb_port*
   +nvm: tb_nvm*
 }
@@ -46,7 +39,6 @@ class tb_path_hop {
 }
 
 class tb_path {
-  +tb: tb*
   +hops: tb_path_hop*
 }
 
