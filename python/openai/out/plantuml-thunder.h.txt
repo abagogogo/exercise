@@ -1,0 +1,39 @@
+@startuml
+
+class tb {
+  +nhi: tb_nhi*
+  +ctl: tb_ctl*
+  +wq: workqueue_struct*
+  +root_switch: tb_switch*
+  +cm_ops: tb_cm_ops*
+}
+
+class tb_property_dir {
+  +uuid: uuid_t*
+  +properties: list_head
+}
+
+class tb_property {
+  +dir: tb_property_dir*
+}
+
+class tb_xdomain {
+  +dev: device
+  +tb: tb*
+  +remote_uuid: uuid_t*
+  +local_uuid: uuid_t*
+  +remote_properties: tb_property_dir*
+}
+
+class tb_switch {
+  +tb: tb*
+}
+
+tb "1" -- "1" tb_switch : contains
+tb_xdomain "1" -- "1" tb : contains
+tb_xdomain "1" -- "1" tb_property_dir : contains
+tb_property "1" -- "1" tb_property_dir : contains
+tb_property_dir "1" -- "many" tb_property : has
+
+@enduml
+
