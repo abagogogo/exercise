@@ -21,7 +21,7 @@ def debug(msg):
 
 def usage():
   if is_debug:
-    print("Usage: python3 sys.argv[0] SOURCE_FILE")
+    print(f"Usage: python3 {sys.argv[0]} SOURCE_FILE")
   
 def main():
   if len(sys.argv) > 1:
