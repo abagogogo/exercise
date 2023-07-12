@@ -1,0 +1,31 @@
+@startuml
+class tb_switch {
+    dev : device
+    ports : tb_port[]
+}
+
+class tb_port {
+    switch : tb_switch
+    bandwidth_group : tb_bandwidth_group
+}
+
+class tb_bandwidth_group {
+    ports : tb_port[]
+}
+
+class tb_path {
+    hops : tb_path_hop[]
+}
+
+class tb_path_hop {
+    port : tb_port
+}
+
+class tb_cm_ops {
+}
+
+tb_switch "1" -- "*" tb_port
+tb_port "0..1" -- "*" tb_bandwidth_group
+tb_path "1" -- "*" tb_path_hop
+tb_path_hop "1" -- "1" tb_port
+@enduml
