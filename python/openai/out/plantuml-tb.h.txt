@@ -1,5 +1,9 @@
 @startuml
 
+class tb {
+	+root_switch: tb_switch*
+}
+
 class tb_nvm {
 }
 
