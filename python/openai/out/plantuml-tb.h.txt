@@ -1,132 +1,63 @@
 @startuml
+
 class tb_nvm {
-    device* dev
-    u32 major
-    u32 minor
-    int id
-    nvmem_device* active
-    size_t active_size
-    nvmem_device* non_active
-    void* buf
-    void* buf_data_start
-    size_t buf_data_size
-    bool authenticating
-    bool flushed
-    tb_nvm_vendor_ops* vops
 }
 
 class tb_switch_tmu {
-    int cap
-    bool has_ucap
-    enum tb_switch_tmu_rate rate
-    bool unidirectional
-    bool unidirectional_request
-    enum tb_switch_tmu_rate rate_request
 }
 
 class tb_switch {
-    device dev
-    tb_regs_switch_header config
-    tb_port* ports
-    tb_dma_port* dma_port
-    tb_switch_tmu tmu
-    tb* tb
-    // ... other fields
+  +ports: tb_port*
+  +tmu: tb_switch_tmu
+  +tb: tb*
+  +nvm: tb_nvm*
 }
 
 class tb_bandwidth_group {
-    tb* tb
-    int index
-    list_head ports
+  +tb: tb*
 }
 
 class tb_port {
-    tb_regs_port_header config
-    tb_switch* sw
-    tb_port* remote
-    tb_xdomain* xdomain
-    int cap_phy
-    int cap_tmu
-    int cap_adap
-    int cap_usb4
-    usb4_port* usb4
-    // ... other fields
+  +sw: tb_switch*
+  +remote: tb_port*
+  +xdomain: tb_xdomain*
+  +usb4: usb4_port*
+  +dual_link_port: tb_port*
+  +group: tb_bandwidth_group*
 }
 
 class usb4_port {
-    device dev
-    tb_port* port
-    bool can_offline
-    bool offline
-    // ... other fields
+  +port: tb_port*
 }
 
 class tb_retimer {
-    device dev
-    tb* tb
-    u8 index
-    u32 vendor
-    u32 device
-    tb_port* port
-    tb_nvm* nvm
-    bool no_nvm_upgrade
-    u32 auth_status
+  +tb: tb*
+  +port: tb_port*
+  +nvm: tb_nvm*
 }
 
 class tb_path_hop {
-    tb_port* in_port
-    tb_port* out_port
-    int in_hop_index
-    int in_counter_index
-    int next_hop_index
-    unsigned int initial_credits
-    unsigned int nfc_credits
+  +in_port: tb_port*
+  +out_port: tb_port*
 }
 
 class tb_path {
-    tb* tb
-    const char* name
-    enum tb_path_port ingress_shared_buffer
-    enum tb_path_port egress_shared_buffer
-    enum tb_path_port ingress_fc_enable
-    enum tb_path_port egress_fc_enable
-    // ... other fields
+  +tb: tb*
+  +hops: tb_path_hop*
 }
 
 class tb_cm_ops {
-    // function pointers
 }
 
-tb_switch "1" *-- "*" tb_port
-tb_switch "1" *-- "1" tb_regs_switch_header
-tb_port "1" *-- "1" tb_regs_port_header
-tb_port "0..1" *-- "*" tb_bandwidth_group
-tb_nvm "1" *-- "1" device
-tb_nvm "1" *-- "1" nvmem_device
-tb_switch_tmu "1" *-- "1" enum tb_switch_tmu_rate
-tb_switch "1" *-- "*" tb_port
-tb_switch "1" *-- "1" tb_dma_port
-tb_switch "1" *-- "1" tb_switch_tmu
-tb_switch "1" *-- "1" tb
-tb_switch "1" *-- "1" device
-tb_port "1" *-- "1" tb_switch
-tb_port "1" *-- "1" tb_port
-tb_port "0..1" *-- "1" tb_xdomain
-tb_port "0..1" *-- "1" usb4_port
-usb4_port "1" *-- "1" device
-usb4_port "1" *-- "1" tb_port
-tb_retimer "1" *-- "1" device
-tb_retimer "1" *-- "1" tb
-tb_retimer "1" *-- "1" tb_port
-tb_retimer "1" *-- "1" tb_nvm
-tb_path_hop "1" *-- "1" tb_port
-tb_path_hop "1" *-- "1" tb_port
-tb_path "1" *-- "*" tb_path_hop
-tb_cm_ops "1" --* "1" tb
-tb_cm_ops "1" --* "1" tb_switch
-tb_cm_ops "1" --* "1" tb_switch_tmu
-tb_cm_ops "1" --* "1" tb_xdomain
-tb_cm_ops "1" --* "1" tb_port
+tb_switch "1" -- "many" tb_port : contains
+tb_switch "1" -- "1" tb_switch_tmu : contains
+tb_switch "1" -- "1" tb_nvm : contains
+tb_port "1" -- "1" usb4_port : contains
+tb_port "1" -- "1" tb_bandwidth_group : belongs to
+tb_retimer "1" -- "1" tb_port : contains
+tb_retimer "1" -- "1" tb_nvm : contains
+tb_path "1" -- "many" tb_path_hop : has
+tb_path_hop "1" -- "1" tb_port : in_port
+tb_path_hop "1" -- "1" tb_port : out_port
 
 @enduml
-
