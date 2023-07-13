@@ -41,6 +41,11 @@ def simplify_structs(structs):
       simplified_structs.append(simplified_struct)
   return simplified_structs
 
+def formatUml(content):
+  if "@startuml" not in content:
+    content = "@startuml\n" + content
+  return content
+
 def debug(msg):
   if is_debug:
     print(msg)
@@ -59,11 +64,8 @@ def main():
   structs = extract_structs(source_file)
   structs = simplify_structs(structs)
 
-  for i, struct in enumerate(structs):
-    debug(f"\n\nstruct {i}:\n\n{struct}\n")
-
   prompt ="Code snippet:\n" + "\n".join(structs)
-  prompt = prompt + "\nPlease generate PlantUML diagrams to explain the relationship of these struct."
+  prompt = prompt + "\nPlease generate one PlantUML class diagram to explain the relationship of these struct.\n\n@startuml\n"
   debug(f"\n\nprompt:\n\n{prompt}\n")
 
   messages = [
@@ -82,7 +84,9 @@ def main():
     frequency_penalty=0.0,
     presence_penalty=0.0,
   )
-  print(response.choices[0].message.content.strip())
+
+  uml = formatUml(response.choices[0].message.content.strip())
+  print(uml)
 
 if __name__ == "__main__":
   main()
