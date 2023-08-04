@@ -4,13 +4,14 @@
 
 using namespace std;
 
-#define ARRAY_SIZE(_array) (sizeof((_array)) / sizeof((_array)[0]))
+#define ARRAY_SIZE(_array) \
+  static_cast<int>((sizeof((_array)) / sizeof((_array)[0])))
 
 template <class T>
 void print_vector(const vector<T> &array, const string name = "") {
-  cout << (name.length() > 0 ? name : "Unknown");
+  cout << (!name.empty() ? name : "Unknown");
   cout << " with " << array.size() << " elements:" << endl;
-  for (auto n : array) {
+  for (const auto &n : array) {
     cout << n << " ";
   }
   cout << endl;
@@ -42,7 +43,7 @@ void max_heapify_down(vector<int> &array, int curr, int heap_size) {
   }
 }
 
-void max_heapify_up(vector<int> &array, int curr, int heap_size) {
+void max_heapify_up(vector<int> &array, int curr) {
   while (curr > 0 && parent(curr) >= 0 && array[parent(curr)] < array[curr]) {
     swap(array[parent(curr)], array[curr]);
     curr = parent(curr);
@@ -62,7 +63,7 @@ bool remove_heap(vector<int> &array, int *heap_size) {
 void insert_heap(vector<int> &array, int val, int *heap_size) {
   array.push_back(val);
   (*heap_size)++;
-  max_heapify_up(array, *heap_size - 1, *heap_size);
+  max_heapify_up(array, *heap_size - 1);
 }
 
 int build_max_heap(vector<int> &array) {
