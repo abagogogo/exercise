@@ -7,26 +7,20 @@ class Box {
   double length;
   double breadth;
   double height;
+
+  Box(double l, double b, double h) : length(l), breadth(b), height(h) {}
+
+  double volume() const {
+      return length * breadth * height;
+  }
 };
 
-int main(void) {
-  Box box1;
-  Box box2;
-  double volume = 0.0;
+int main() {
+  // Use uniform initialization for direct initialization.
+  Box box1{5.0, 6.0, 7.0};
+  Box box2{10.0, 12.0, 13.0};
 
-  box1.height = 5.0;
-  box1.length = 6.0;
-  box1.breadth = 7.0;
-
-  box2.height = 10.0;
-  box2.length = 12.0;
-  box2.breadth = 13.0;
-
-  volume = box1.height * box1.length * box1.breadth;
-  cout << "volume of box1 : " << volume << endl;
-
-  volume = box2.height * box2.length * box2.breadth;
-  cout << "volume of box2 : " << volume << endl;
-
+  cout << "volume of box1 : " << box1.volume() << endl;
+  cout << "volume of box2 : " << box2.volume() << endl;
   return 0;
 }

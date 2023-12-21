@@ -45,12 +45,11 @@ class Rectangle : public Shape {
 int main() {
   Shape *shape;
 
-  Rectangle rect(10, 7);
-  Triangle tri(10, 5);
-
+  Rectangle rect{10, 7};
   shape = &rect;
   shape->area();
 
+  Triangle tri{10, 5};
   shape = &tri;
   shape->area();
 

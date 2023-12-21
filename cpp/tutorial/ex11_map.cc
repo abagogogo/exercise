@@ -60,13 +60,12 @@ int main() {
     cout << "   " << key << " => " << value << endl;
   }
 
-  if (M.find("SRM") != M.end()) {
+  if (auto found = M.find("SRM"); found != M.end()) {
     cout << "Found and erase it" << endl;
-    M.erase("SRM");
+    M.erase(found);
   }
 
-  auto found = M.find("Nothing");
-  if (found != M.end()) {
+  if (auto found = M.find("Nothing"); found != M.end()) {
     M.erase(found);
   }
 

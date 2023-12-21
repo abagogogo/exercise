@@ -12,14 +12,14 @@ class Stack {
  public:
   void push(const T& elem) { elems.push_back(elem); }
 
-  void pop(void) {
+  void pop() {
     if (elems.empty()) {
       throw out_of_range("Stack<>::pop(): empty stack");
     }
     elems.pop_back();
   }
 
-  T top() const {
+  const T top() const {
     if (elems.empty()) {
       throw out_of_range("Stack<>::top(): empty stack");
     }
@@ -29,7 +29,7 @@ class Stack {
   bool empty() const { return elems.empty(); }
 };
 
-int main(void) {
+int main() {
   try {
     Stack<int> intStack;
     Stack<string> stringStack;
@@ -39,7 +39,6 @@ int main(void) {
 
     stringStack.push("hello");
     cout << stringStack.top() << endl;
-    stringStack.pop();
     stringStack.pop();
     stringStack.top();
   } catch (const exception& ex) {

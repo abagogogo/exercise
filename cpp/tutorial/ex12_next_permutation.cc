@@ -1,10 +1,11 @@
 #include <algorithm>
+#include <array>
 #include <iostream>
 
 using namespace std;
 
 int main() {
-  // std::array is a safer and modern contain in c++ than c array.
+  // std::array is a safer and modern container in c++ than c array.
   array<int, 3> a = {1, 2, 3};
 
   do {

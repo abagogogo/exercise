@@ -3,17 +3,19 @@ using namespace std;
 
 class Box {
  public:
+  Box(double l, double b, double h) : length(l), breadth(b), height(h) {}
+  Box() = default;
   double getVolume(void) const { return length * breadth * height; }
-  void setLength(double len) { length = len; }
-  void setBreadth(double bre) { breadth = bre; }
-  void setHeight(double hei) { height = hei; }
+  void setLength(double l) { length = l; }
+  void setBreadth(double b) { breadth = b; }
+  void setHeight(double h) { height = h; }
 
   // Overload + operator to add two Box objects.
   Box operator+(const Box& b) {
-    Box new_box;
-    new_box.length = this->length + b.length;
-    new_box.breadth = this->breadth + b.breadth;
-    new_box.height = this->height + b.height;
+    Box new_box{
+        this->length + b.length,
+        this->breadth + b.breadth,
+        this->height + b.height};
     return new_box;
   }
 
@@ -24,28 +26,15 @@ class Box {
 };
 
 int main() {
-  Box box1;
-  Box box2;
-  Box box3;
-  double volume = 0.0;
+  Box box1{6.0, 7.0, 5.0};
+  Box box2{12.0, 13.0, 10.0};
+  Box box3; // Initialized with default values.
 
-  box1.setLength(6.0);
-  box1.setBreadth(7.0);
-  box1.setHeight(5.0);
-
-  box2.setLength(12.0);
-  box2.setBreadth(13.0);
-  box2.setHeight(10.0);
-
-  volume = box1.getVolume();
-  cout << "Volume of box1 : " << volume << endl;
-
-  volume = box2.getVolume();
-  cout << "Volume of box2 : " << volume << endl;
+  cout << "Volume of box1 : " << box1.getVolume() << endl;
+  cout << "Volume of box2 : " << box2.getVolume() << endl;
 
   box3 = box1 + box2;
-  volume = box3.getVolume();
-  cout << "Volume of box3 : " << volume << endl;
+  cout << "Volume of box3 : " << box3.getVolume() << endl;
 
   return 0;
 }
