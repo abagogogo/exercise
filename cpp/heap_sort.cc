@@ -4,9 +4,6 @@
 
 using namespace std;
 
-#define ARRAY_SIZE(_array) \
-  static_cast<int>((sizeof((_array)) / sizeof((_array)[0])))
-
 template <class T>
 void print_vector(const vector<T> &array, const string name = "") {
   cout << (!name.empty() ? name : "Unknown");
@@ -17,11 +14,9 @@ void print_vector(const vector<T> &array, const string name = "") {
   cout << endl;
 }
 
-// Heap definiition: an array object that can be viewed as a nearly complete
-// tree. Heap property: max-heap property: A[parent(i)] >= A[i] -> root is the
-// max. Heap application: priority queue (union/insert/extract-min), k-way
-// merge.
-
+// Heap definition: an array object that can be viewed as a nearly complete tree.
+// Max-heap property: A[parent(i)] >= A[i] -> root is the max.
+// Heap application: priority queue (union/insert/extract-min), k-way merge.
 int parent(int i) { return (i - 1) / 2; }
 
 int left(int i) { return (i * 2 + 1); }
@@ -85,41 +80,15 @@ void heap_sort(vector<int> &array) {
 }
 
 int main(void) {
-  int raw0[] = {8, 3, 4, 6, 5, -1, -1, 0};
-  vector<int> data0(raw0, raw0 + ARRAY_SIZE(raw0));
-  int raw1[] = {9, 13, 2, 4, 5, 1, 11};
-  vector<int> data1(raw1, raw1 + ARRAY_SIZE(raw1));
-  int raw2[] = {1, 2, 3, 4, 5, 6, 7, 8};
-  vector<int> data2(raw2, raw2 + ARRAY_SIZE(raw2));
-  int raw3[] = {7, 6, 5, 4, 3, 2, 1};
-  vector<int> data3(raw3, raw3 + ARRAY_SIZE(raw3));
+    vector<int> data0 = {8, 3, 4, 6, 5, -1, -1, 0};
+    vector<int> data1 = {9, 13, 2, 4, 5, 1, 11};
+    vector<int> data2 = {1, 2, 3, 4, 5, 6, 7, 8};
+    vector<int> data3 = {7, 6, 5, 4, 3, 2, 1};
 
-  int heap_size;
+    print_vector(data0, "original data0");
+    heap_sort(data0);
+    print_vector(data0, "sorted data0");
 
-  print_vector(data0, "original data0");
-  heap_sort(data0);
-  print_vector(data0, "sorted data0");
-
-#if 1
-  data0.clear();
-  heap_size = 0;
-  for (int i = 0; i < ARRAY_SIZE(raw0); i++) {
-    insert_heap(data0, raw0[i], &heap_size);
-  }
-  cout << "heap_size = " << heap_size << endl;
-  print_vector(data0, "after insert_heap()");
-
-  int cnt = data0.size();
-  for (int i = 0; i < cnt; i++) {
-    cout << "    removing root = " << data0[0] << endl;
-    if (false == remove_heap(data0, &heap_size)) {
-      cout << "[ERROR] remove_heap() at i = " << i << endl;
-      break;
-    }
-  }
-#endif
-
-#if 0
     print_vector(data1, "original data1");
     heap_sort(data1);
     print_vector(data1, "sorted data1");
@@ -137,7 +106,6 @@ int main(void) {
     print_vector(data4, "original data4");
     heap_sort(data4);
     print_vector(data4, "sorted data4");
-#endif
 
-  return 0;
+    return 0;
 }
