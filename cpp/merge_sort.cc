@@ -4,8 +4,6 @@
 
 using namespace std;
 
-#define ARRAY_SIZE(_array) (sizeof((_array)) / sizeof((_array)[0]))
-
 template <class T>
 void print_vector(const vector<T> &array, const string name = "") {
   cout << (name.length() > 0 ? name : "Unknown");
@@ -16,18 +14,13 @@ void print_vector(const vector<T> &array, const string name = "") {
   cout << endl;
 }
 
-void merge(vector<int> &data, int begin, int mid, int end) {
-  int n1 = mid - begin + 1;
-  int n2 = end - mid;
-  vector<int> left;
-  vector<int> right;
-  int i, j, k;
+void merge(vector<int> &data, size_t begin, size_t mid, size_t end) {
+  vector<int> left(data.begin() + begin, data.begin() + mid + 1);
+  vector<int> right(data.begin() + mid + 1, data.begin() + end + 1);
+  size_t i, j, k;
 
-  for (i = 0; i < n1; ++i) left.push_back(data[begin + i]);
-  for (j = 0; j < n2; ++j) right.push_back(data[mid + 1 + j]);
-  left.push_back(INT_MAX);
-  right.push_back(INT_MAX);
-
+  left.emplace_back(INT_MAX);
+  right.emplace_back(INT_MAX);
   i = j = 0;
   for (k = begin; k <= end; ++k) {
     if (left[i] <= right[j]) {
@@ -38,9 +31,9 @@ void merge(vector<int> &data, int begin, int mid, int end) {
   }
 }
 
-void merge_sort(vector<int> &data, int begin, int end) {
+void merge_sort(vector<int> &data, size_t begin, size_t end) {
   if (begin < end) {
-    int mid = (begin + end) / 2;
+    size_t mid = (begin + end) / 2;
     merge_sort(data, begin, mid);
     merge_sort(data, mid + 1, end);
     merge(data, begin, mid, end);
@@ -48,14 +41,10 @@ void merge_sort(vector<int> &data, int begin, int end) {
 }
 
 int main(void) {
-  int raw0[] = {8, 3, 4, 6, 5, -1, -1, 0};
-  vector<int> data0(raw0, raw0 + ARRAY_SIZE(raw0));
-  int raw1[] = {9, 13, 2, 4, 5, 1, 11};
-  vector<int> data1(raw1, raw1 + ARRAY_SIZE(raw1));
-  int raw2[] = {1, 2, 3, 4, 5, 6, 7, 8};
-  vector<int> data2(raw2, raw2 + ARRAY_SIZE(raw2));
-  int raw3[] = {7, 6, 5, 4, 3, 2, 1};
-  vector<int> data3(raw3, raw3 + ARRAY_SIZE(raw3));
+  vector<int> data0 = {8, 3, 4, 6, 5, -1, -1, 0};
+  vector<int> data1 = {9, 13, 2, 4, 5, 1, 11};
+  vector<int> data2 = {1, 2, 3, 4, 5, 6, 7, 8};
+  vector<int> data3 = {7, 6, 5, 4, 3, 2, 1};
 
   cout << "INT_MAX = " << INT_MAX << endl;
 
