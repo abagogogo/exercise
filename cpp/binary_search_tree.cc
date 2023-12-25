@@ -1,46 +1,61 @@
-#include <iostream>
-
-using namespace std;
-
 #include <algorithm>
 #include <climits>
 #include <iostream>
+#include <memory> // for smart pointers
 
 using namespace std;
 
 struct Node {
-  Node *left = nullptr;
-  Node *right = nullptr;
-  int id;
+    std::unique_ptr<Node> left = nullptr;
+    std::unique_ptr<Node> right = nullptr;
+    int id;
 
-  Node(int id) : id(id) {}
-  ~Node(void) {
-    delete left;
-    delete right;
-  }
+    Node(int id) : id(id) {}
 };
 
-void preorder(Node *root) {
-  if (!root) return;
+void preorder(const Node *root) {
+    if (!root) return;
 
-  cout << root->id << ",";
-  preorder(root->left);
-  preorder(root->right);
+    cout << root->id << ", ";
+    preorder(root->left.get());
+    preorder(root->right.get());
 }
 
-void inorder(Node *root) {
-  if (!root) return;
+void inorder(const Node *root) {
+    if (!root) return;
 
-  inorder(root->left);
-  cout << root->id << ",";
-  inorder(root->right);
+    inorder(root->left.get());
+    cout << root->id << ", ";
+    inorder(root->right.get());
 }
 
-Node *bst_search(Node *root, int value) {
+std::unique_ptr<Node> makeTree1() {
+  auto root = std::make_unique<Node>(0);
+
+  root->left = std::make_unique<Node>(1);
+  root->right = std::make_unique<Node>(4);
+  root->left->left = std::make_unique<Node>(2);
+  root->left->right = std::make_unique<Node>(3);
+  root->right->left = std::make_unique<Node>(5);
+  return root;
+}
+
+std::unique_ptr<Node>makeTree2() {
+  auto root = std::make_unique<Node>(3);
+
+  root->left = std::make_unique<Node>(1);
+  root->right = std::make_unique<Node>(5);
+  root->left->left = std::make_unique<Node>(0);
+  root->left->right = std::make_unique<Node>(2);
+  root->right->left = std::make_unique<Node>(4);
+  return root;
+}
+
+const Node *bst_search(std::unique_ptr<Node> &root, int value) {
   if (!root) return nullptr;
 
   if (value == root->id) {
-    return root;
+    return root.get();
   } else if (value < root->id) {
     return bst_search(root->left, value);
   } else {
@@ -48,49 +63,44 @@ Node *bst_search(Node *root, int value) {
   }
 }
 
-void bst_insert(Node *root, Node *node) {
-  if (!root) {
-    cout << "[ERROR] empty root, drop node " << endl;
-    return;
-  }
+void bst_insert(std::unique_ptr<Node> &root, std::unique_ptr<Node> node) {
   if (!node) {
     cout << "[ERROR] empty node to insert" << endl;
     return;
   }
 
   if (node->id == root->id) {
-    cout << "[ERROR] drop duplicated node " << endl;
+    cout << "[ERROR] drop duplicated node " << node->id << endl;
   } else if (node->id < root->id) {
     if (root->left)
-      bst_insert(root->left, node);
+      bst_insert(root->left, std::move(node));
     else
-      root->left = node;
+      root->left = std::move(node);
   } else {
     if (root->right)
-      bst_insert(root->right, node);
+      bst_insert(root->right, std::move(node));
     else
-      root->right = node;
+      root->right = std::move(node);
   }
 }
 
 void bst_swap(Node *x, Node *y) {
   if (!x || !y) return;
 
-  int tmp = x->id;
-  x->id = y->id;
-  y->id = tmp;
+  swap(x->id, y->id);
 }
 
-Node *bst_leftmost(Node *curr) {
+Node *bst_leftmost(std::unique_ptr<Node> &curr) {
   if (!curr) return nullptr;
 
-  while (curr->left) {
-    curr = curr->left;
+  Node *ptr = curr.get();
+  while (ptr->left.get()) {
+    ptr = ptr->left.get();
   }
-  return curr;
+  return ptr;
 }
 
-void bst_delete_r(Node *parent, Node *curr, int value) {
+void bst_delete_r(std::unique_ptr<Node> &parent, std::unique_ptr<Node> &curr, int value) {
   if (!parent || !curr) {
     cout << "[WARNING] value to delete is not found!" << value << endl;
     return;
@@ -108,76 +118,61 @@ void bst_delete_r(Node *parent, Node *curr, int value) {
   // Delete key here
   if (curr->left && curr->right) {
     Node *successor = bst_leftmost(curr->right);
-    bst_swap(curr, successor);
+    bst_swap(curr.get(), successor);
     bst_delete_r(curr, curr->right, value);
   } else {
-    Node *only_child = (curr->left ? curr->left : curr->right);
-    if (curr == parent->left) {
-      parent->left = only_child;
+    std::unique_ptr<Node> &only_child = (curr->left ? curr->left : curr->right);
+    if (curr.get() == parent->left.get()) {
+      parent->left = std::move(only_child);
     } else {
-      parent->right = only_child;
+      parent->right = std::move(only_child);
     }
-    curr->left = curr->right =
-        nullptr;  // To avoid its children deleted unexpected.
-    delete curr;
+    curr.reset();
     cout << value << " found and deleted" << endl;
   }
 }
 
-void bst_delete(Node *root, int value) {
+void bst_delete(std::unique_ptr<Node> &root, int value) {
   if (!root) return;
 
-  Node dummy(value - 1);
-  dummy.right = root;
-  bst_delete_r(&dummy, root, value);
-  dummy.right = nullptr;
+  auto dummy = std::make_unique<Node>(value - 1);
+  dummy->right = std::move(root);
+  bst_delete_r(dummy, dummy->right, value);
+  root = std::move(dummy->right);
 }
 
 int main() {
   // Tree1 for preorder ////////
-  Node *t1 = new Node(0);
-
-  t1->left = new Node(1);
-  t1->right = new Node(4);
-  t1->left->left = new Node(2);
-  t1->left->right = new Node(3);
-  t1->right->left = new Node(5);
-
+  auto t1 = makeTree1();
   cout << "t1 preorder..." << endl;
-  preorder(t1);
+  preorder(t1.get()); // Method 1: pass a raw pointer.
   cout << endl;
-  delete t1;
 
   // Tree2 for BST /////////
-  Node *t2 = new Node(3);
-
-  t2->left = new Node(1);
-  t2->right = new Node(5);
-  t2->left->left = new Node(0);
-  t2->left->right = new Node(2);
-  t2->right->left = new Node(4);
-
+  auto t2 = makeTree2();
   cout << "t2 inorder..." << endl;
-  inorder(t2);
+  inorder(t2.get());
   cout << endl;
 
-  Node *found = bst_search(t2, 4);
+  // Method 2: Pass a reference of a smart pointer for BST operations.
+  auto found = bst_search(t2, 4);
   cout << "t2 search 4 => " << (found ? "found" : "[ERROR] NOT found") << endl;
   found = bst_search(t2, 2);
   cout << "t2 search 2 => " << (found ? "found" : "[ERROR] NOT found") << endl;
   found = bst_search(t2, 6);
   cout << "t2 search 6 => " << (found ? "[ERROR] found" : "NOT found") << endl;
 
-  bst_insert(t2, new Node(6));
+  cout << "inserting 6..." << endl;
+  bst_insert(t2, std::make_unique<Node>(6));
   found = bst_search(t2, 6);
   cout << "t2 search 6 => " << (found ? "found" : "[ERROR] NOT found") << endl;
 
-  bst_insert(t2, new Node(-1));
-  bst_insert(t2, new Node(-2));
-  bst_insert(t2, new Node(7));
-  bst_insert(t2, new Node(8));
+  bst_insert(t2, std::make_unique<Node>(-1));
+  bst_insert(t2, std::make_unique<Node>(-2));
+  bst_insert(t2, std::make_unique<Node>(7));
+  bst_insert(t2, std::make_unique<Node>(8));
   cout << "t2 inorder after insertion..." << endl;
-  inorder(t2);
+  inorder(t2.get());
   cout << endl;
 
   bst_delete(t2, -2);
@@ -187,9 +182,8 @@ int main() {
   bst_delete(t2, 8);
   bst_delete(t2, 1);
   cout << "t2 inorder after deletion..." << endl;
-  inorder(t2);
+  inorder(t2.get());
   cout << endl;
 
-  delete t2;
   return 0;
 }
