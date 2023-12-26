@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip> // for setw() and setfill()
 
 using namespace std;
 
@@ -18,15 +19,15 @@ class MultiTable {
 void MultiTable::print_header(ostream& os) {
   int col;
 
-  os << "  | ";
+  os << setw(5) << setfill(' ') << " | ";
   for (col = 1; col <= num_; ++col) {
-    os << col << " ";
+    os << setw(2) << setfill(' ') << col << " ";
   }
   os << endl;
 
-  os << "--+";
+  os << "---+";
   for (col = 1; col <= num_; ++col) {
-    os << "--";
+    os << "---";
   }
   os << endl;
 }
@@ -34,9 +35,9 @@ void MultiTable::print_header(ostream& os) {
 void MultiTable::print_row(ostream& os, int row) {
   if (row < 0 || row > num_) return;
 
-  os << row << " | ";
+  os << setw(2) << setfill(' ') << row << " | ";
   for (int col = 1; col <= num_; ++col) {
-    os << (row * col) << " ";
+    os << setw(2) << setfill(' ') << (row * col) << " ";
   }
   os << endl;
 }
