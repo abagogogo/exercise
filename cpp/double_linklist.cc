@@ -3,7 +3,7 @@
 using namespace std;
 
 struct Node {
-  Node(int a_data) : data(a_data) {}
+  Node(int data) : data(data) {}
   Node *prev;
   Node *next;
   int data;
@@ -19,7 +19,7 @@ void insert(DList *list, Node *node) {
     list->head = node;
   } else {
     list->tail->next = node;
-    node->prev = list->head;
+    node->prev = list->tail;
   }
   list->tail = node;
 }
@@ -34,6 +34,7 @@ Node *reverse(Node *head) {
   while (curr) {
     curr->prev = next;
     curr->next = prev;
+
     prev = curr;
     curr = next;
     if (next) next = next->next;
@@ -58,14 +59,14 @@ void remove_dup(Node *head) {
 
 Node *get_kth(Node *head, int k) {
   Node *runner = head;
-  for (int i = 0; i < k && runner; ++i) {
+  for (int i = 1; i < k && runner; ++i) {
     runner = runner->next;
   }
   return runner;
 }
 
 Node *get_kth_to_last(Node *head, int k) {
-  Node *runner = get_kth(head, k);
+  Node *runner = get_kth(head, k + 1);
   if (!runner) return nullptr;
 
   Node *curr = head;
@@ -83,7 +84,8 @@ Node *add_rev_list_helper(Node *l1, Node *l2, int carry) {
   if (l2) sum += l2->data;
   Node *node = new Node(sum % 10);
   node->next = add_rev_list_helper((l1 ? l1->next : nullptr),
-                                   (l2 ? l2->next : nullptr), sum / 10);
+                                   (l2 ? l2->next : nullptr),
+                                   sum / 10);
   return node;
 }
 
