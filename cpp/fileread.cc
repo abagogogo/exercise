@@ -1,10 +1,11 @@
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
 using namespace std;
 
-int main(void) {
+int main() {
   ifstream input("fileread.cc", ios::in | ios::binary);
 
   stringstream sstr;
@@ -21,7 +22,7 @@ int main(void) {
     // cout << tmp_byte;
     sum += tmp_byte;
   }
-  cout << "----- file sum = " << sum << endl;
+  cout << "----- file sum = 0x" << setw(4) << setfill('0') << hex << uppercase << sum << endl;
 
   return 0;
 }
