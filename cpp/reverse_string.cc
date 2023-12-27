@@ -1,33 +1,34 @@
+#include <algorithm>
 #include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-#define swap_char(_a, _b) \
-  do {                    \
-    char tmp = _a;        \
-    (_a) = (_b);          \
-    (_b) = tmp;           \
-  } while (0)
-
 void reverse_string(string &str) {
   size_t head = 0;
-  size_t tail = str.length() - 1;
+  size_t tail = str.length();
   while (head < tail) {
-    swap_char(str[head], str[tail]);
+    swap(str[head], str[tail - 1]);
     head++;
     tail--;
   }
 }
 
-// II: abcde
-// NG: aecce
-// ??: aecae
-//
-int main(void) {
-  string str = "abcde";
+int main() {
+  vector<string> strings{"abcde", "aecce", "aecae"};
 
-  cout << "original: " << str << endl;
-  reverse_string(str);
-  cout << "reversed: " << str << endl;
+  for (auto& str : strings) {
+    auto ans = str;
+    std::reverse(ans.begin(), ans.end());
+
+    cout << "original: " << str << endl;
+    reverse_string(str);
+    if (str == ans) {
+       cout << "[PASS] reversed: " << str << endl;
+    } else {
+       cout << "[FAIL] reversed: " << str << ", ans: " << ans << endl;
+    }
+  }
   return 0;
 }
