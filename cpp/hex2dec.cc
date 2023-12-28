@@ -30,7 +30,7 @@ big_dec hex2dec(const big_hex& in) {
 }
 
 void show_big_nums(const big_hex& hex_num, const big_dec& dec_num) {
-  cout << "Heximal number = 0x";
+  cout << "Hex number = 0x";
   for (int i = hex_num.size() - 1; i >= 0; --i)
     cout << setfill('0') << setw(2) << right << hex << hex_num[i];
   cout << endl;
@@ -42,11 +42,11 @@ void show_big_nums(const big_hex& hex_num, const big_dec& dec_num) {
 
 int main() {
   vector<big_hex> hex_numbers{
-      {0x02, 0x01},              // 0x102
+      {0x02, 0x01},              // 0x0102
       {0xff, 0xff, 0xff, 0xff},  // 0xffffffff
-      {0x0, 0x0, 0x0, 0x1},      // 0x1000000
+      {0x0, 0x0, 0x0, 0x1},      // 0x01000000
       {0x44, 0x33, 0x22, 0x11},  // 0x11223344
-      {0x9a},
+      {0x9a},                    // 0x9a
   };
 
   for (const auto& hex_num : hex_numbers) {
