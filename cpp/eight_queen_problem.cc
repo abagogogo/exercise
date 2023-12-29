@@ -5,63 +5,65 @@
 using namespace std;
 
 class Queen {
- public:
-  Queen(void) { row_ = col_ = 0; }
+  public:
+    using QUEEN_LIST = vector<Queen>;
+    using QUEEN_STACK = vector<Queen *>;
+    Queen() = default;
 
-  bool isValid(const vector<Queen *> &settled_queens) {
-    for (auto &p : settled_queens) {
-      if (p->col_ == col_ || abs(p->col_ - col_) == abs(p->row_ - row_)) {
-        return false;
+    bool isValid(const QUEEN_STACK &settled_queens) {
+      for (const auto &p : settled_queens) {
+        if (p->col_ == col_ || abs(p->col_ - col_) == abs(p->row_ - row_)) {
+          return false;
+        }
+      }
+      return true;
+    }
+  
+    static void resetQueens(QUEEN_LIST &queens) {
+      int row = 0;
+      for (auto &q : queens) {
+        q.row_ = row++;
+        q.col_ = 0;
       }
     }
-    return true;
-  }
-
-  static void resetQueens(vector<Queen> &queens) {
-    int row = 0;
-    for (auto &q : queens) {
-      q.row_ = row++;
-      q.col_ = 0;
-    }
-  }
-
-  static void printQueens(const vector<Queen> &queens) {
-    int i = 0;
-    for (auto &q : queens) {
-      cout << "Queen[" << i << "] = " << q.row_ << ", " << q.col_ << endl;
-      ++i;
-    }
-  }
-
-  static bool addQueen(vector<Queen *> &settled_queens, Queen *next_queen,
-                       int total_queen_num) {
-    while (next_queen->col_ < total_queen_num) {
-      if (next_queen->isValid(settled_queens)) {
-        settled_queens.push_back(next_queen);
-        return true;
-      } else {
-        next_queen->col_++;
+  
+    static void printQueens(const QUEEN_LIST &queens) {
+      int i = 0;
+      for (const auto &q : queens) {
+        cout << "Queen[" << i << "] = " << q.row_ << ", " << q.col_ << endl;
+        ++i;
       }
     }
-    next_queen->col_ = 0;
-    return false;
-  }
-
-  static void rollback(vector<Queen *> &settled_queens) {
-    Queen *q = settled_queens.back();
-    q->col_++;
-    settled_queens.pop_back();
-  }
-
- protected:
-  int row_;
-  int col_;
+  
+    static bool addQueen(QUEEN_STACK &settled_queens, Queen *next_queen,
+                         int total_queen_num) {
+      while (next_queen->col_ < total_queen_num) {
+        if (next_queen->isValid(settled_queens)) {
+          settled_queens.push_back(next_queen);
+          return true;
+        } else {
+          next_queen->col_++;
+        }
+      }
+      next_queen->col_ = 0;
+      return false;
+    }
+  
+    static void rollback(QUEEN_STACK &settled_queens) {
+      Queen *q = settled_queens.back();
+      q->col_++;
+      settled_queens.pop_back();
+    }
+  
+  protected:
+    int row_ = 0;
+    int col_ = 0;
 };
 
-int main(void) {
+int main() {
   int total_queen_num = 8;
-  vector<Queen> queens(total_queen_num);
-  vector<Queen *> settled_queens;
+  Queen::QUEEN_LIST queens(total_queen_num);
+  Queen::QUEEN_STACK settled_queens;
   Queen *next_queen;
 
   Queen::resetQueens(queens);
