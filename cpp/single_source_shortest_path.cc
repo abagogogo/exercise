@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <climits>
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <set>
 #include <vector>
@@ -52,7 +51,7 @@ class Graph {
 
         if (dist[v] > dist[u] + node.weight) {
           if (dist[v] != MAX_DIST) {
-            pq.erase(make_pair(dist[v], v));
+            pq.erase({dist[v], v});
           }
           dist[v] = dist[u] + node.weight;
           pq.emplace(make_pair(dist[v], v));
