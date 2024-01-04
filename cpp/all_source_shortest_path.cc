@@ -5,7 +5,7 @@
 
 using namespace std;
 
-#define MAX_DIST INT_MAX
+const int MAX_DIST=INT_MAX;
 
 struct AdjNode {
   int dst;
@@ -23,12 +23,12 @@ class Graph {
 
   void add_edge(int src, int dst, int weight) {
     int max_v = max(src, dst);
-    if (max_v >= adj_list_.size()) adj_list_.resize(max_v + 1);
+    if (max_v >= static_cast<int>(adj_list_.size())) adj_list_.resize(max_v + 1);
     adj_list_[src].emplace_back(AdjNode(dst, weight));
   }
 
   void show(void) {
-    for (int src = 0; src < adj_list_.size(); ++src) {
+    for (int src = 0; src < static_cast<int>(adj_list_.size()); ++src) {
       for (auto &node : adj_list_[src]) {
         cout << src << " -> " << node.dst << ", weight=" << node.weight << endl;
       }
@@ -36,7 +36,7 @@ class Graph {
   }
 
   bool is_edge(int u, int v, int &weight) {
-    if (u < adj_list_.size()) {
+    if (u < static_cast<int>(adj_list_.size())) {
       for (auto &n : adj_list_[u]) {
         if (n.dst == v) {
           weight = n.weight;
@@ -49,12 +49,11 @@ class Graph {
   }
 
   //
-  // Floyd-Warshall, dynaic programming:
-  // M_k(u, v) = min ( M_k-1(u,s) + weight(s, v), M_k-1(u,v))
-  //
   // Floyd-Warshall, dynamic programming:
+  // M_k(u, v) = min ( M_k-1(u, s) + weight(s, v), M_k-1(u, v))
+  //
   void shortest_path() {
-    int vert_cnt = adj_list_.size();
+    int vert_cnt = static_cast<int>(adj_list_.size());
     vector<vector<int>> M(vert_cnt, vector<int>(vert_cnt, INT_MAX));
 
     for (int u = 0; u < vert_cnt; ++u) {
@@ -67,8 +66,7 @@ class Graph {
     for (int k = 0; k < vert_cnt; ++k) {
       for (int u = 0; u < vert_cnt; ++u) {
         for (int v = 0; v < vert_cnt; ++v) {
-          int weight;
-          if (M[u][k] != INT_MAX && is_edge(k, v, weight)) {
+          if (int weight; M[u][k] != INT_MAX && is_edge(k, v, weight)) {
             int new_cost = M[u][k] + weight;
             if (new_cost < M[u][v]) {
               M[u][v] = new_cost;
@@ -88,7 +86,7 @@ class Graph {
   }
 };
 
-int main(void) {
+int main() {
   Graph g(9);
 
   g.add_edge(0, 1, 4);
