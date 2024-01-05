@@ -14,7 +14,7 @@ class Edge {
  public:
   Edge(int src, int dst, int weight) : src_(src), dst_(dst), weight_(weight) {}
 
-  void show(void) {
+  void show() {
     cout << "src = " << src_;
     cout << ", dst = " << dst_;
     cout << ", weight = " << weight_ << endl;
@@ -37,13 +37,12 @@ class Edge {
 class Graph {
  public:
   void add_edge(Edge e) {
-    int v = max(e.src(), e.dst());
     edges_.emplace_back(e);
-    if (v > vert_cnt_) vert_cnt_ = v + 1;
     adj_list_[e.src()].emplace_back(e.dst());
+    vert_cnt_ = max(vert_cnt_, max(e.src(), e.dst()) + 1);
   }
 
-  void show(void) {
+  void show() {
     for (auto &e : edges_) e.show();
   }
 
@@ -58,7 +57,7 @@ class Graph {
     queue.push_back(start);
     visited[start] = true;
     while (!queue.empty()) {
-      int curr = queue.front();
+      auto curr = queue.front();
       queue.pop_front();
       cout << "BFS old: do something to " << curr << endl;
 
@@ -78,11 +77,11 @@ class Graph {
     queue.emplace_back(start);
     visited[start] = true;
     while (!queue.empty()) {
-      int curr = queue.front();
+      auto curr = queue.front();
       queue.pop_front();
       cout << "BFS: do something to " << curr << endl;
 
-      for (int neighbor : adj_list_[curr]) {
+      for (auto &neighbor : adj_list_[curr]) {
         if (!visited[neighbor]) {
           queue.emplace_back(neighbor);
           visited[neighbor] = true;
@@ -97,7 +96,7 @@ class Graph {
 
     stack.push(start);
     while (!stack.empty()) {
-      int curr = stack.top();
+      auto curr = stack.top();
       stack.pop();
 
       if (!visited[curr]) {
@@ -117,11 +116,11 @@ class Graph {
     stack.push(start);
     visited[start] = true;
     while (!stack.empty()) {
-      int curr = stack.top();
+      auto curr = stack.top();
       stack.pop();
 
       cout << "DFS: do something to " << curr << endl;
-      for (int neighbor : adj_list_[curr]) {
+      for (auto &neighbor : adj_list_[curr]) {
         if (!visited[neighbor]) {
           stack.push(neighbor);
           visited[neighbor] = true;

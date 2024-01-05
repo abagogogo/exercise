@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int main(void) {
+int main() {
   Graph g1;
   g1.add_edge(Edge(0, 1, 10));
   g1.add_edge(Edge(1, 2, 5));
