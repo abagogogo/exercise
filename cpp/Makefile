@@ -1,7 +1,8 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra
 
-LATEST_CC := $(shell find . -type f -name "*.cc" | xargs stat --format '%Y:%n' | sort -nr | awk -F: '{print $$2}' | head -n1)
+#LATEST_CC := $(shell find . -type f -name "*.cc" | xargs stat --format '%Y:%n' | sort -nr | awk -F: '{print $$2}' | head -n1)
+LATEST_CC := $(shell ls -t *.cc 2>/dev/null | head -n1)
 SOURCE ?= $(LATEST_CC)
 
 EXE = ./a.out
@@ -18,7 +19,7 @@ run: $(EXE)
 	./$(EXE)
 
 edit:
-	gvim $(SOURCE_CPP)
+	vim $(SOURCE_CPP)
 
 clean:
 	rm -f $(OBJECTS) $(EXE)
