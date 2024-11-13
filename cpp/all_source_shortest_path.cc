@@ -1,85 +1,97 @@
+#include <algorithm>
 #include <climits>
 #include <iostream>
-#include <set>
+#include <limits>
+#include <optional>
+#include <tuple>
 #include <vector>
 
 using namespace std;
 
-const int MAX_DIST=INT_MAX;
-
-struct AdjNode {
-  int dst;
-  int weight;
-
-  AdjNode(int d, int w) : dst(d), weight(w) {}
-};
-
 class Graph {
+public:
+  struct Edge {
+    int dst;
+    int weight;
+
+    constexpr Edge(int d, int w) : dst(d), weight(w) {};
+  };
+
  private:
-  vector<vector<AdjNode>> adj_list_;
+  vector<vector<Edge>> adj_list_;
+  static constexpr auto INF = std::numeric_limits<int>::max();
 
  public:
-  Graph(int vert_cnt) { adj_list_.resize(vert_cnt); }
+  explicit Graph(size_t vert_cnt) : adj_list_(vert_cnt) {};
 
   void add_edge(int src, int dst, int weight) {
-    int max_v = max(src, dst);
-    if (max_v >= static_cast<int>(adj_list_.size())) adj_list_.resize(max_v + 1);
-    adj_list_[src].emplace_back(AdjNode(dst, weight));
+    const auto max_v = max(src, dst);
+    if (max_v >= static_cast<int>(adj_list_.size())) {
+      adj_list_.resize(max_v + 1);
+    }
+    adj_list_[src].emplace_back(dst, weight);
   }
 
-  void show(void) {
-    for (int src = 0; src < static_cast<int>(adj_list_.size()); ++src) {
-      for (auto &node : adj_list_[src]) {
-        cout << src << " -> " << node.dst << ", weight=" << node.weight << endl;
+  void show() {
+    for (size_t src = 0; src < adj_list_.size(); ++src) {
+      for (const auto& edge : adj_list_[src]) {
+        cout << src << " -> " << edge.dst
+            << ", weight=" << edge.weight << endl;
       }
     }
   }
 
-  bool is_edge(int u, int v, int &weight) {
-    if (u < static_cast<int>(adj_list_.size())) {
-      for (auto &n : adj_list_[u]) {
-        if (n.dst == v) {
-          weight = n.weight;
-          return true;
-        }
-      }
+  [[nodiscard]]
+  optional<int> get_edge_weight(int u, int v) const {
+    if (u >= static_cast<int>(adj_list_.size())) {
+      return nullopt;
     }
-    weight = INT_MAX;
-    return false;
+
+    const auto it = find_if(
+      adj_list_[u].begin(), 
+      adj_list_[u].end(),
+      [v](const auto& edge) { return edge.dst == v; }
+    );
+
+    return it != adj_list_[u].end()
+      ? optional{it->weight}
+      : nullopt;
   }
 
   //
   // Floyd-Warshall, dynamic programming:
   // M_k(u, v) = min ( M_k-1(u, s) + weight(s, v), M_k-1(u, v))
   //
-  void shortest_path() {
-    int vert_cnt = static_cast<int>(adj_list_.size());
-    vector<vector<int>> M(vert_cnt, vector<int>(vert_cnt, INT_MAX));
+  void shortest_path() const {
+    const auto vert_cnt = adj_list_.size();
+    vector<vector<int>> M(vert_cnt, vector<int>(vert_cnt, INF));
 
-    for (int u = 0; u < vert_cnt; ++u) {
+    for (size_t u = 0; u < vert_cnt; ++u) {
       M[u][u] = 0;
-      for (auto &n : adj_list_[u]) {
-        M[u][n.dst] = n.weight;
+      for (const auto &edge : adj_list_[u]) {
+        M[u][edge.dst] = edge.weight;
       }
     }
 
-    for (int k = 0; k < vert_cnt; ++k) {
-      for (int u = 0; u < vert_cnt; ++u) {
-        for (int v = 0; v < vert_cnt; ++v) {
-          if (int weight; M[u][k] != INT_MAX && is_edge(k, v, weight)) {
-            int new_cost = M[u][k] + weight;
-            if (new_cost < M[u][v]) {
-              M[u][v] = new_cost;
+    for (size_t k = 0; k < vert_cnt; ++k) {
+      for (size_t u = 0; u < vert_cnt; ++u) {
+        for (size_t v = 0; v < vert_cnt; ++v) {
+          if (M[u][k] != INF) {
+            if (const auto weight = get_edge_weight(k, v); weight) {
+              M[u][v] = min(
+                M[u][v],
+                M[u][k] + *weight);
             }
           }
         }
       }
     }
 
-    for (int u = 0; u < vert_cnt; ++u) {
-      for (int v = 0; v < vert_cnt; ++v) {
-        if (M[u][v] != INT_MAX) {
-          cout << "M[" << u << "][" << v << "] = " << M[u][v] << endl;
+    for (size_t u = 0; u < vert_cnt; ++u) {
+      for (size_t v = 0; v < vert_cnt; ++v) {
+        if (M[u][v] != INF) {
+          cout << "M[" << u << "][" << v << "] = "
+              << M[u][v] << endl;
         }
       }
     }
@@ -87,31 +99,33 @@ class Graph {
 };
 
 int main() {
-  Graph g(9);
+  // Test case 1
+  Graph g1(9);
+  const vector<tuple<int, int, int>> edges1 = {
+    {0, 1, 4},  {0, 7, 8},  {1, 2, 8},  {1, 7, 11},
+    {2, 3, 7},  {2, 8, 2},  {2, 5, 4},  {3, 4, 9},
+    {3, 5, 14}, {4, 5, 10}, {5, 6, 2},  {6, 7, 1},
+    {6, 8, 6},  {7, 8, 7}
+  };
+   
+  for (const auto& [src, dst, weight] : edges1) {
+    g1.add_edge(src, dst, weight);
+  }
 
-  g.add_edge(0, 1, 4);
-  g.add_edge(0, 7, 8);
-  g.add_edge(1, 2, 8);
-  g.add_edge(1, 7, 11);
-  g.add_edge(2, 3, 7);
-  g.add_edge(2, 8, 2);
-  g.add_edge(2, 5, 4);
-  g.add_edge(3, 4, 9);
-  g.add_edge(3, 5, 14);
-  g.add_edge(4, 5, 10);
-  g.add_edge(5, 6, 2);
-  g.add_edge(6, 7, 1);
-  g.add_edge(6, 8, 6);
-  g.add_edge(7, 8, 7);
+  cout << "Graph 1" << endl;
+  g1.show();
+  g1.shortest_path();
 
-  g.show();
-  g.shortest_path();
-
+  // Test case 1
   Graph g2(4);
-  g2.add_edge(0, 1, 5);
-  g2.add_edge(0, 3, 10);
-  g2.add_edge(1, 2, 3);
-  g2.add_edge(2, 3, 1);
+  const vector<tuple<int, int, int>> edges2 = {
+    {0, 1, 5}, {0, 3, 10}, {1, 2, 3}, {2, 3, 1}
+  };
+
+  for (const auto& [src, dst, weight] : edges2) {
+    g2.add_edge(src, dst, weight);
+  }
+
   g2.show();
   g2.shortest_path();
 
